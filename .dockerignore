@@ -1,0 +1,7 @@
+# .dockerignore
+target
+.git
+.gitignore
+.dockerignore
+**/tests
+**/*.rs.bk

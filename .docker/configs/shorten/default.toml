@@ -1,0 +1,28 @@
+[app]
+host = "0.0.0.0"
+port = 3000
+
+[zookeeper]
+host = "zookeeper"
+port = 2181
+
+[zookeeper.id_generator.shard_info]
+base_path = "wee"
+end       = 1_000
+id        = 0
+start     = 0
+
+[mongodb]
+database = "wee"
+host     = "mongodb"
+password = "test"
+port     = 27017
+username = "test"
+[mongodb.collections]
+"url_repo" = "urls"
+
+[redis]
+host = "redis"
+port = 6379
+[redis.dbs]
+"shorten" = 0

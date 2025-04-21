@@ -1,0 +1,22 @@
+[package]
+edition = "2024"
+name    = "wee-core"
+version = "0.1.0"
+
+[dependencies]
+bon          = { workspace = true }
+chrono       = { workspace = true }
+futures-util = { workspace = true }
+mongodb      = { workspace = true }
+nestify      = { workspace = true }
+serde        = { workspace = true }
+serde_json   = { workspace = true }
+tap          = { workspace = true }
+thiserror    = { workspace = true }
+tokio        = { workspace = true }
+tracing      = { workspace = true }
+anyhow       = { workspace = true }
+map-macro    = { workspace = true }
+
+[dev-dependencies]
+tracing-subscriber = { workspace = true }

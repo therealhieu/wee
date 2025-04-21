@@ -1,0 +1,18 @@
+[app]
+host = "localhost"
+port = 3001
+
+[mongodb]
+database = "wee"
+host     = "localhost"
+password = "test"
+port     = 27017
+username = "test"
+[mongodb.collections]
+"url_repo" = "urls"
+
+[redis]
+host = "localhost"
+port = 6379
+[redis.dbs]
+"redirect" = 0

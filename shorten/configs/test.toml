@@ -1,0 +1,8 @@
+[zookeeper.id_generator.shard_info]
+base_path = "wee-test"
+
+[redis.dbs]
+"shorten" = 15
+
+[mongodb.collections]
+"url_repo" = "urls-test"

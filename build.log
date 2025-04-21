@@ -1,0 +1,135 @@
+--progress is a global compose flag, better use `docker compose --progress xx build ...#0 building with "desktop-linux" instance using docker driver
+
+#1 [redirect-1 internal] load build definition from Dockerfile
+#1 transferring dockerfile: 428B done
+#1 DONE 0.1s
+
+#2 [redirect-1 internal] load .dockerignore
+#2 transferring context: 150B done
+#2 DONE 0.1s
+
+#3 [redirect-1 internal] load metadata for docker.io/library/rust:1.86-slim
+#3 DONE 0.0s
+
+#4 [shorten-1 internal] load .dockerignore
+#4 transferring context: 2B done
+#4 DONE 0.0s
+
+#5 [shorten-1 internal] load build definition from Dockerfile
+#5 transferring dockerfile: 447B done
+#5 DONE 0.0s
+
+#6 [shorten-2 internal] load .dockerignore
+#6 transferring context: 150B done
+#6 DONE 0.0s
+
+#7 [shorten-2 internal] load build definition from Dockerfile
+#7 transferring dockerfile: 447B done
+#7 DONE 0.0s
+
+#3 [shorten-2 internal] load metadata for docker.io/library/rust:1.86-slim
+#3 DONE 0.0s
+
+#8 [redirect-1 auth] library/debian:pull token for registry-1.docker.io
+#8 DONE 0.0s
+
+#9 [shorten-2 internal] load metadata for docker.io/library/debian:buster-slim
+#9 DONE 2.4s
+
+#10 [redirect-1 stage-1 1/3] FROM docker.io/library/debian:buster-slim@sha256:bb3dc79fddbca7e8903248ab916bb775c96ec61014b3d02b4f06043b604726dc
+#10 DONE 0.0s
+
+#11 [shorten-1 stage-1 2/3] WORKDIR /app
+#11 CACHED
+
+#12 [redirect-1 builder 1/5] FROM docker.io/library/rust:1.86-slim
+#12 DONE 0.0s
+
+#13 [shorten-1 builder 2/5] WORKDIR /app
+#13 CACHED
+
+#14 [shorten-2 internal] load build context
+#14 transferring context: 11.96kB 0.0s done
+#14 DONE 0.0s
+
+#15 [shorten-1 internal] load build context
+#15 transferring context: 2.44kB done
+#15 DONE 0.0s
+
+#16 [redirect-1 internal] load build context
+#16 transferring context: 11.96kB 0.0s done
+#16 DONE 0.0s
+
+#17 [shorten-1 builder 3/5] COPY .. .
+#17 DONE 0.0s
+
+#18 [shorten-2 builder 3/5] COPY .. .
+#18 DONE 0.0s
+
+#19 [shorten-2 builder 4/5] RUN ls -la | cat
+#19 ...
+
+#20 [shorten-1 builder 4/5] RUN ls -la | cat
+#20 0.198 total 28
+#20 0.198 drwxr-xr-x 1 root root 4096 Apr 16 13:22 .
+#20 0.198 drwxr-xr-x 1 root root 4096 Apr 16 13:27 ..
+#20 0.198 -rw-r--r-- 1 root root 1129 Apr 16 09:20 Cargo.toml
+#20 0.198 -rw-r--r-- 1 root root  371 Apr 16 13:22 Dockerfile
+#20 0.198 drwxr-xr-x 2 root root 4096 Apr 16 11:55 configs
+#20 0.198 drwxr-xr-x 5 root root 4096 Apr 16 04:43 src
+#20 0.198 drwxr-xr-x 2 root root 4096 Apr 16 05:40 tests
+#20 DONE 0.2s
+
+#19 [shorten-2 builder 4/5] RUN ls -la | cat
+#19 0.172 total 144
+#19 0.172 drwxr-xr-x 1 root root  4096 Apr 16 13:27 .
+#19 0.172 drwxr-xr-x 1 root root  4096 Apr 16 13:27 ..
+#19 0.172 -rw-r--r-- 1 root root 84779 Apr 16 10:48 Cargo.lock
+#19 0.172 -rw-r--r-- 1 root root  1157 Apr 16 09:17 Cargo.toml
+#19 0.172 -rw-r--r-- 1 root root 11357 Apr 10 07:04 LICENSE
+#19 0.172 -rw-r--r-- 1 root root    25 Apr 10 07:04 README.md
+#19 0.172 -rw-r--r-- 1 root root  1125 Apr 16 13:27 build.log
+#19 0.172 drwxr-xr-x 3 root root  4096 Apr 16 09:16 core
+#19 0.172 drwxr-xr-x 3 root root  4096 Apr 16 10:59 docker
+#19 0.172 -rw-r--r-- 1 root root   721 Apr 16 06:23 docker-compose.dev.yml
+#19 0.172 -rw-r--r-- 1 root root  1887 Apr 16 13:27 docker-compose.yml
+#19 0.172 drwxr-xr-x 4 root root  4096 Apr 16 13:27 redirect
+#19 0.172 drwxr-xr-x 4 root root  4096 Apr 16 13:22 shorten
+#19 0.172 drwxr-xr-x 4 root root  4096 Apr 16 10:34 wee-bruno
+#19 DONE 0.2s
+
+#21 [redirect-1 builder 3/5] COPY .. .
+#21 CACHED
+
+#22 [redirect-1 builder 4/5] RUN ls -la | cat
+#22 CACHED
+
+#23 [shorten-2 builder 5/5] RUN cargo build --release -p wee-shorten
+#23 ...
+
+#24 [shorten-1 builder 5/5] RUN cargo build --release -p wee-shorten
+#24 0.312 error: failed to parse manifest at `/app/Cargo.toml`
+#24 0.312 
+#24 0.312 Caused by:
+#24 0.312   error inheriting `anyhow` from workspace root manifest's `workspace.dependencies.anyhow`
+#24 0.312 
+#24 0.312 Caused by:
+#24 0.312   failed to find a workspace root
+#24 ERROR: process "/bin/sh -c cargo build --release -p wee-shorten" did not complete successfully: exit code: 101
+
+#25 [redirect-1 builder 5/5] RUN cargo build --release -p wee-redirect
+#25 CANCELED
+
+#23 [shorten-2 builder 5/5] RUN cargo build --release -p wee-shorten
+#23 CANCELED
+------
+ > [shorten-1 builder 5/5] RUN cargo build --release -p wee-shorten:
+0.312 error: failed to parse manifest at `/app/Cargo.toml`
+0.312 
+0.312 Caused by:
+0.312   error inheriting `anyhow` from workspace root manifest's `workspace.dependencies.anyhow`
+0.312 
+0.312 Caused by:
+0.312   failed to find a workspace root
+------
+failed to solve: process "/bin/sh -c cargo build --release -p wee-shorten" did not complete successfully: exit code: 101

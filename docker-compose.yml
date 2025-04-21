@@ -1,0 +1,147 @@
+version: "3.8"
+
+x-shorten-service-env: &shorten-service-env
+  RUST_BACKTRACE: 1
+  APP_NAME: shorten
+
+x-short-service: &short-service
+  build:
+    context: .
+    dockerfile: ./shorten/Dockerfile
+  networks:
+    - wee-network
+  environment:
+    <<: *shorten-service-env
+  depends_on:
+    mongodb:
+      condition: service_healthy
+    redis:
+      condition: service_healthy
+    zookeeper:
+      condition: service_healthy
+  volumes:
+    - ./.docker/configs/shorten:/app/configs
+
+x-redirect-service-env: &redirect-service-env
+  RUST_BACKTRACE: 1
+  APP_NAME: redirect
+
+x-redirect-service: &redirect-service
+  build:
+    context: .
+    dockerfile: ./redirect/Dockerfile
+  networks:
+    - wee-network
+  environment:
+    <<: *redirect-service-env
+  depends_on:
+    mongodb:
+      condition: service_healthy
+    redis:
+      condition: service_healthy
+    zookeeper:
+      condition: service_healthy
+  volumes:
+    - ./.docker/configs/redirect:/app/configs
+
+services:
+  zookeeper:
+    image: confluentinc/cp-zookeeper:7.9.0
+    container_name: wee-zookeeper
+    networks:
+      - wee-network
+    ports:
+      - "2181:2181"
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+    healthcheck:
+      test: ["CMD", "echo", "ruok", "|", "nc", "localhost", "2181"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+  mongodb:
+    image: mongo:8.0.8
+    container_name: wee-mongodb
+    networks:
+      - wee-network
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: test
+      MONGO_INITDB_ROOT_PASSWORD: test
+      MONGO_INITDB_DATABASE: wee
+    command: mongod --auth
+    healthcheck:
+      test: ["CMD", "echo", "db.stats().ok", "|", "mongo", "localhost:27017/wee", "--quiet"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+  redis:
+    image: redis/redis-stack-server:7.4.0-v3
+    container_name: wee-redis
+    networks:
+      - wee-network
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+  shorten-1:
+    <<: *short-service
+    container_name: wee-shorten-1
+    environment:
+      <<: *shorten-service-env
+      SHORTEN__APP__PORT: 3001
+    ports:
+      - "3001:3001"
+
+  shorten-2:
+    <<: *short-service
+    container_name: wee-shorten-2
+    environment:
+      <<: *shorten-service-env
+      SHORTEN__APP__PORT: 3002
+    ports:
+      - "3002:3002"
+
+  redirect-1:
+    <<: *redirect-service
+    container_name: wee-redirect-1
+    environment:
+      <<: *redirect-service-env
+      REDIRECT__APP__PORT: 4001
+    ports:
+      - "4001:4001"
+
+  nginx:
+    image: nginx:1.27.4
+    container_name: wee-nginx
+    networks:
+      - wee-network
+    ports:
+      - "3600:80"
+    volumes:
+      - ./public:/usr/share/nginx/html
+      - ./.docker/configs/nginx:/etc/nginx/conf.d
+    depends_on:
+      - shorten-1
+      - shorten-2
+      - redirect-1
+
+volumes:
+  mongodb_data:
+  redis_data:
+
+networks:
+  wee-network:
+    driver: bridge
