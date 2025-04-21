@@ -1,0 +1,59 @@
+[workspace]
+members  = ["core", "redirect", "shorten"]
+resolver = "2"
+
+[workspace.dependencies]
+bon               = "3.6.3"
+futures-util      = "0.3.31"
+map-macro         = "0.3.0"
+mongodb           = "3.2.3"
+nestify           = "0.3.3"
+pretty_assertions = "1.4.1"
+serde_json        = "1.0.140"
+tap               = "1.0.1"
+thiserror         = "2.0.12"
+tower             = "0.5.2"
+tracing           = "0.1.41"
+
+[workspace.dependencies.anyhow]
+features = ["backtrace"]
+version  = "1.0.98"
+
+[workspace.dependencies.axum]
+features = ["macros"]
+version  = "0.8.3"
+
+[workspace.dependencies.chrono]
+features = ["serde"]
+version  = "0.4.26"
+
+[workspace.dependencies.config]
+features = ["preserve_order", "toml"]
+version  = "0.15.11"
+
+[workspace.dependencies.redis]
+features = ["tokio-comp"]
+version  = "0.29.5"
+
+[workspace.dependencies.serde]
+features = ["derive"]
+version  = "1.0.219"
+
+[workspace.dependencies.tokio]
+features = ["full"]
+version  = "1.44.2"
+
+[workspace.dependencies.tower-http]
+features = ["trace"]
+version  = "0.6.2"
+
+[workspace.dependencies.tracing-subscriber]
+features = ["env-filter"]
+version  = "0.3.19"
+
+[workspace.dependencies.validator]
+features = ["derive"]
+version  = "0.20.0"
+
+[profile.dev]
+split-debuginfo = "unpacked"

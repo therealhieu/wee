@@ -1,0 +1,11 @@
+meta {
+  name: redirect
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{host}}:{{redirect_port}}/google
+  body: none
+  auth: inherit
+}

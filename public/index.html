@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Wee URL Shortener</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    body {
+      font-family: "Segoe UI", sans-serif;
+      background: #f4f6f8;
+      margin: 0;
+      padding: 0;
+    }
+
+    .container {
+      max-width: 600px;
+      margin: 4rem auto;
+      background: #ffffff;
+      padding: 2rem;
+      border-radius: 12px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+    }
+
+    h1 {
+      text-align: center;
+      color: #222;
+      margin-bottom: 2rem;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .input-group {
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    input[type="url"] {
+      flex-grow: 1;
+      padding: 0.75rem;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 1rem;
+    }
+
+    input[type="text"],
+    input[type="datetime-local"] {
+      flex-grow: 1;
+      padding: 0.75rem;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 1rem;
+    }
+
+    button {
+      padding: 0.75rem 1.25rem;
+      background-color: #5c67f2;
+      color: white;
+      font-size: 1rem;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.2s ease;
+      width: 100%;
+    }
+
+    button:hover {
+      background-color: #4a53d1;
+    }
+
+    .result {
+      margin-top: 1.5rem;
+      text-align: center;
+      font-size: 1.1rem;
+    }
+
+    .result a {
+      color: #5c67f2;
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .hidden {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🔗 Wee URL Shortener</h1>
+
+    <form id="shorten-form">
+      <div class="input-group">
+        <input
+          type="url"
+          name="url"
+          placeholder="Enter a long URL..."
+          required
+        />
+      </div>
+      <div class="input-group">
+        <input
+          type="text"
+          name="alias"
+          placeholder="Custom alias (optional)"
+          pattern="[a-zA-Z0-9_-]+"
+          title="Only letters, numbers, underscores, and hyphens allowed"
+        />
+        <input
+          type="datetime-local"
+          name="expiration_time"
+          placeholder="Set expiration time (optional, leave empty for permanent link)"
+          title="Optional: Set when this link should expire. Leave empty for a permanent link"
+        />
+      </div>
+      <button type="submit">Shorten</button>
+    </form>
+
+    <div id="result" class="result hidden"></div>
+  </div>
+
+  <script>
+    const form = document.getElementById("shorten-form");
+    const result = document.getElementById("result");
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      result.classList.add("hidden");
+
+      const longUrl = form.url.value;
+      const alias = form.alias.value;
+      const expirationDate = form.expiration_time.value;
+
+      try {
+        const resp = await fetch("/urls", {
+          method: "POST",
+          headers: { 
+            "Content-Type": "application/json",
+            "Accept": "application/json"
+          },
+          body: JSON.stringify({ 
+            url: longUrl,
+            alias: alias || undefined,
+            expirationDate: expirationDate || undefined,
+            userId: "public"
+          }),
+        });
+
+        if (!resp.ok) {
+          const error = await resp.json();
+          throw new Error(error.message || "Failed to shorten URL");
+        }
+
+        const data = await resp.json();
+        console.log(data);
+        const respShort = data.short;
+        const respAlias = data.alias;
+        const respExpirationDate = data.expirationDate;
+
+        result.innerHTML = `
+          Shortened URL: <a href="${window.location.origin}/${respShort}" target="_blank">${window.location.origin}/${respShort}</a>
+          ${respAlias ? `<br>Access via alias: <a href="${window.location.origin}/${respAlias}" target="_blank">${window.location.origin}/${respAlias}</a>` : ''}
+          ${respExpirationDate ? `<br>Expires: ${new Date(respExpirationDate).toLocaleString()}` : ''}
+        `;
+        result.classList.remove("hidden");
+      } catch (err) {
+        result.innerHTML = `❌ ${err.message}`;
+        result.classList.remove("hidden");
+      }
+    });
+  </script>
+</body>
+</html>

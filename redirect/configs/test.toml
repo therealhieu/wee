@@ -1,0 +1,5 @@
+[redis.dbs]
+"redirect" = 15
+
+[mongodb.collections]
+"url_repo" = "urls-test"
